@@ -1,4 +1,4 @@
-wdrone - Precision Agriculture with ArduPilot
+Precision Agriculture with ArduPilot
 Overview
 
 wdrone is an open-source project aimed at developing a comprehensive and automated solution for precision agriculture using ArduPilot. Leveraging open-source technologies and well-established standards, the project strives to provide a robust platform that integrates drone control with advanced data collection, image analysis, and geospatial information management features.
