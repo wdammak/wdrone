@@ -1,0 +1,78 @@
+<!-- wdrone/scripts/templates/planning.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Planning Interface</title>
+</head>
+<body>
+    <h1>Drone Planning Interface</h1>
+    <form id="task-form">
+        <label for="task">Task:</label>
+        <input type="text" id="task" name="task" required>
+        <button type="button" onclick="addTask()">Add Task</button>
+    </form>
+    <ul id="task-list">
+        {% for task in tasks %}
+            <li>{{ task }} <button type="button" onclick="removeTask('{{ task }}')">Remove</button></li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        function addTask() {
+            const taskInput = document.getElementById('task');
+            const task = taskInput.value.trim();
+            if (task !== '') {
+                fetch('/add_task', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `task=${encodeURIComponent(task)}`,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateTaskList(data.tasks);
+                        taskInput.value = '';
+                    }
+                });
+            }
+        }
+
+        function removeTask(task) {
+            fetch('/remove_task', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `task=${encodeURIComponent(task)}`,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateTaskList(data.tasks);
+                }
+            });
+        }
+
+        function updateTaskList(tasks) {
+            const taskList = document.getElementById('task-list');
+            taskList.innerHTML = '';
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.innerText = `${task} `;
+                const removeButton = document.createElement('button');
+                removeButton.type = 'button';
+                removeButton.innerText = 'Remove';
+                removeButton.onclick = () => removeTask(task);
+                li.appendChild(removeButton);
+                taskList.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
