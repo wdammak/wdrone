@@ -1,4 +1,4 @@
-# wdrone/scripts/advanced_ardupilot_script.py
+# wdrone/scripts/main.py
 
 from dronekit import connect, VehicleMode
 import time
